@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/.github.io/Roshan-Project/static/css/main.b50d5f12.css",
+    "main.js": "/.github.io/Roshan-Project/static/js/main.abe180c7.js",
+    "static/media/Qs_Iranyekan.ttf": "/.github.io/Roshan-Project/static/media/Qs_Iranyekan.3fb368ca1bd556d23f46.ttf",
+    "index.html": "/.github.io/Roshan-Project/index.html",
+    "main.b50d5f12.css.map": "/.github.io/Roshan-Project/static/css/main.b50d5f12.css.map",
+    "main.abe180c7.js.map": "/.github.io/Roshan-Project/static/js/main.abe180c7.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b50d5f12.css",
+    "static/js/main.abe180c7.js"
+  ]
+}
