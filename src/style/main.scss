@@ -279,6 +279,8 @@
             background: #555; 
           }
     }
+    .audio-player{
+    }
 }
 
 //dropdown 
@@ -321,4 +323,15 @@
 
 audio::-webkit-media-controls-panel {
     background-color: #F8F8F8;
+}
+
+.volume{
+    .css-cp2j25-MuiSlider-thumb {
+        display: none;
+    }
+}
+.player{
+    display: grid;
+    grid-template-columns: 10% 60% 10% 20%;
+    text-align: center;
 }
