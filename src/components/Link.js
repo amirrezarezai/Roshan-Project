@@ -1,8 +1,34 @@
 import { useState } from "react"
 import Show from "./Show"
+import axios from 'axios';
 
 const Link = () => {
     const [open,setOpen] = useState(0)
+    const [link,setLink] = useState('')
+    const [data, setData] = useState()
+
+    const sendLink = (e) =>{
+      
+      axios.post('/api1/api/transcribe_files/', {
+        media_urls: [  
+          link  
+      ] 
+      }, {
+        headers: {  
+          Authorization: `Token a85d08400c622b50b18b61e239b9903645297196`,   
+      } 
+      })
+      .then(function (response) {
+        // console.log(response.data);
+        setData(response.data)
+        setOpen(1)
+        
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+      
+    }
     return(
         <>
         {open === 0 && <div className="content">
@@ -17,7 +43,7 @@ const Link = () => {
                     marginLeft: "0.5rem",
                     marginRight: "0.5rem",
                   }}
-                  onClick={()=>setOpen(1)}
+                  onClick={(e)=>sendLink(e)}
                 >
                   <svg
                     width="14"
@@ -44,6 +70,7 @@ const Link = () => {
                 <input
                   className="input"
                   placeholder="example.com/sample.mp3"
+                  onChange={(e)=>setLink(e.target.value)}
                 ></input>
               </div>
               <p
@@ -61,7 +88,7 @@ const Link = () => {
                 فشار دهید
               </p>
             </div>}
-        {open === 1 && <Show />}     
+        {open === 1 && <Show data={data} setOpen={setOpen} />}     
         </>
     )
 }
