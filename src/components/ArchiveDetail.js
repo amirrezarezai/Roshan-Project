@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 import Slider from "@mui/material/Slider";
 import { useAudio } from "../hook/useAudio";
 import moment from "moment-jalaali";
+import axios from "axios";
+import Swal from "sweetalert2";
 
-const ArchiveDetail = ({ item }) => {
+const ArchiveDetail = ({ item,setRefreshCounter }) => {
   const [openArchive, setOpenArchive] = useState(0);
   const [step, setStep] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -41,9 +43,20 @@ const ArchiveDetail = ({ item }) => {
 
     return { hours, minutes, seconds };
   };
-
   const { hours, minutes, seconds } = parseDuration(item.duration);
   const fullText = item.segments.map((segment) => segment.text).join(" ");
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    },
+  });
 
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
@@ -71,6 +84,42 @@ const ArchiveDetail = ({ item }) => {
     document.body.removeChild(a); 
     e.stopPropagation() 
   }; 
+
+
+  const handleDelete = (e) =>{
+    e.stopPropagation() 
+    axios
+      .delete(`/api1/api/requests/${item.id}/`, {
+        headers: {
+          Authorization: `Token a85d08400c622b50b18b61e239b9903645297196`,
+        },
+      })
+      .then(function (response) {
+        console.log(response.data);
+        setRefreshCounter(prevCounter => prevCounter + 1)
+        Toast.fire({
+          icon: "success",
+          title: 'با موفقیت حذف شد',
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: error.message,
+        });
+      })
+  }
+
+  const handleCopy = (e) => {
+    Toast.fire({
+      icon: "success",
+      title: "متن مورد نظر شما کپی شد",
+    });
+    navigator.clipboard.writeText(fullText) 
+    e.stopPropagation()
+  }
+
 
   return (
     <>
@@ -164,9 +213,7 @@ const ArchiveDetail = ({ item }) => {
             xmlns="http://www.w3.org/2000/svg"
             onMouseEnter={() => setIsHovered3(true)}
             onMouseLeave={() => setIsHovered3(false)}
-            onClick={(e) =>
-              navigator.clipboard.writeText(fullText) & e.stopPropagation()
-            }
+            onClick={(e) => handleCopy(e)}
           >
             <path
               d="M6.62156 17.2009H14.4574C14.8664 17.2004 15.2585 17.0233 15.5476 16.7085C15.8368 16.3938 15.9994 15.967 15.9998 15.522V6.99509C15.9993 6.55014 15.8366 6.12358 15.5475 5.80901C15.2583 5.49443 14.8663 5.31753 14.4574 5.31714H6.62202C6.2132 5.31753 5.82123 5.49445 5.53215 5.80904C5.24307 6.12363 5.08051 6.55019 5.08014 6.99509V15.522C5.08038 15.9669 5.24282 16.3936 5.5318 16.7083C5.82078 17.0231 6.2127 17.2003 6.62156 17.2009ZM14.4574 6.56376C14.5626 6.56376 14.6634 6.60919 14.7378 6.69006C14.8122 6.77094 14.8541 6.88065 14.8542 6.99509V15.522C14.8542 15.6365 14.8124 15.7464 14.738 15.8275C14.6636 15.9086 14.5627 15.9542 14.4574 15.9543H6.62202C6.51682 15.954 6.41601 15.9084 6.3417 15.8273C6.2674 15.7463 6.22567 15.6365 6.22567 15.522V6.99509C6.22567 6.88069 6.26743 6.77098 6.34176 6.69009C6.41609 6.6092 6.5169 6.56376 6.62202 6.56376H14.4574Z"
@@ -187,6 +234,7 @@ const ArchiveDetail = ({ item }) => {
               onMouseEnter={() => setIsHovered4(true)}
               onMouseLeave={() => setIsHovered4(false)}
               style={{ marginBottom: "1rem" }}
+              onClick={(e)=>handleDelete(e)}
             >
               <ellipse
                 cx="12.7011"
@@ -242,6 +290,7 @@ const ArchiveDetail = ({ item }) => {
               xmlns="http://www.w3.org/2000/svg"
               onMouseEnter={() => setIsHovered4(true)}
               onMouseLeave={() => setIsHovered4(false)}
+              onClick={(e)=>handleDelete(e)}
             >
               <path
                 d="M1.49172 2.56934H9.94577C10.2182 2.56934 10.4375 2.78457 10.4375 3.05192V14.5175C10.4375 14.7848 10.2182 15.0001 9.94577 15.0001H1.49172C1.21931 15.0001 1 14.7848 1 14.5175V3.05192C1 2.78457 1.21931 2.56934 1.49172 2.56934V2.56934Z"
@@ -371,9 +420,7 @@ const ArchiveDetail = ({ item }) => {
             xmlns="http://www.w3.org/2000/svg"
             onMouseEnter={() => setIsHovered3(true)}
             onMouseLeave={() => setIsHovered3(false)}
-            onClick={(e) =>
-              navigator.clipboard.writeText(fullText) & e.stopPropagation()
-            }
+            onClick={(e) =>handleCopy(e)}
           >
             <path
               d="M6.62156 17.2009H14.4574C14.8664 17.2004 15.2585 17.0233 15.5476 16.7085C15.8368 16.3938 15.9994 15.967 15.9998 15.522V6.99509C15.9993 6.55014 15.8366 6.12358 15.5475 5.80901C15.2583 5.49443 14.8663 5.31753 14.4574 5.31714H6.62202C6.2132 5.31753 5.82123 5.49445 5.53215 5.80904C5.24307 6.12363 5.08051 6.55019 5.08014 6.99509V15.522C5.08038 15.9669 5.24282 16.3936 5.5318 16.7083C5.82078 17.0231 6.2127 17.2003 6.62156 17.2009ZM14.4574 6.56376C14.5626 6.56376 14.6634 6.60919 14.7378 6.69006C14.8122 6.77094 14.8541 6.88065 14.8542 6.99509V15.522C14.8542 15.6365 14.8124 15.7464 14.738 15.8275C14.6636 15.9086 14.5627 15.9542 14.4574 15.9543H6.62202C6.51682 15.954 6.41601 15.9084 6.3417 15.8273C6.2674 15.7463 6.22567 15.6365 6.22567 15.522V6.99509C6.22567 6.88069 6.26743 6.77098 6.34176 6.69009C6.41609 6.6092 6.5169 6.56376 6.62202 6.56376H14.4574Z"
@@ -394,6 +441,7 @@ const ArchiveDetail = ({ item }) => {
               onMouseEnter={() => setIsHovered4(true)}
               onMouseLeave={() => setIsHovered4(false)}
               style={{ marginBottom: "1rem" }}
+              onClick={(e)=>handleDelete(e)}
             >
               <ellipse
                 cx="12.7011"
@@ -449,6 +497,7 @@ const ArchiveDetail = ({ item }) => {
               xmlns="http://www.w3.org/2000/svg"
               onMouseEnter={() => setIsHovered4(true)}
               onMouseLeave={() => setIsHovered4(false)}
+              onClick={(e)=>handleDelete(e)}
             >
               <path
                 d="M1.49172 2.56934H9.94577C10.2182 2.56934 10.4375 2.78457 10.4375 3.05192V14.5175C10.4375 14.7848 10.2182 15.0001 9.94577 15.0001H1.49172C1.21931 15.0001 1 14.7848 1 14.5175V3.05192C1 2.78457 1.21931 2.56934 1.49172 2.56934V2.56934Z"

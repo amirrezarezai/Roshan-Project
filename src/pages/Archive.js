@@ -1,28 +1,50 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import SideMenu from "../components/SideMenu";
 import axios from "axios";
 import ArchiveDetail from "../components/ArchiveDetail";
+import { Spinner } from "react-bootstrap";
+import Swal from "sweetalert2";
 
 const Archive = () => {
   const [open, setOpen] = useState(0);
   const [data, setData] = useState([]);
+  const [loading,setLoading] = useState(false)
+  const [refreshCounter, setRefreshCounter] = useState(0);
+  const [page,setPage] = useState(1)
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    },
+  });
 
   useEffect(() => {
     axios
-      .get("/api1/api/requests/", {
+      .get(`/api1/api/requests/?page=1`, {
         headers: {
           Authorization: `Token a85d08400c622b50b18b61e239b9903645297196`,
         },
-      })
+      } ,setLoading(true))
       .then(function (response) {
-        // console.log(response.data);
+        console.log(response.data);
         setData(response.data);
+        setLoading(false)
       })
       .catch(function (error) {
         console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: error.message,
+        });
+        setLoading(false)
       });
-  }, []);
-  // console.log(data.results);
+  }, [refreshCounter]);
+
   return (
     <div className="archive-page">
       <SideMenu step={1} />
@@ -180,7 +202,7 @@ const Archive = () => {
           </div>
         )}
         <div className="header">آرشیو من</div>
-        <div className="archive">
+        {!loading && <div className="archive">
           <div className="table">
             <div className="header-table">
               <div></div>
@@ -191,7 +213,7 @@ const Archive = () => {
               <div></div>
             </div>
             {data.results &&
-              data.results.map((item) => <ArchiveDetail item={item} />)}
+              data.results.map((item) => <ArchiveDetail item={item} setRefreshCounter={setRefreshCounter}  />)}
           </div>
           <div className="pagination">
             <button className="pagination-btn">
@@ -235,7 +257,10 @@ const Archive = () => {
               </svg>
             </button>
           </div>
-        </div>
+        </div>}
+        {loading && <Spinner style={{color:'#00ba9f',marginTop:'5rem',marginRight:'45%'}} animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>}
       </div>
     </div>
   );
