@@ -37,7 +37,7 @@ const Archive = () => {
 
   useEffect(() => {
     axios
-      .get(`/api/requests/?page=${page}`, {
+      .get(`/api1/api/requests/?page=${page}`, {
         headers: {
           Authorization: `Token a85d08400c622b50b18b61e239b9903645297196`,
         },
