@@ -24,7 +24,7 @@ const Link = () => {
     setLoading(true);
     axios
       .post(
-        "/api1/api/transcribe_files/",
+        "/api/transcribe_files/",
         {
           media_urls: [link],
         },
