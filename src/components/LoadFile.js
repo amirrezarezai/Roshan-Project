@@ -1,10 +1,21 @@
 import { useState } from "react"
 import Show from "./Show"
 import axios from 'axios';
+import Swal from "sweetalert2";
 
 const LoadFile = () =>{
     const [open, setOpen] = useState(0)
-
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "top",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      },
+    });
     const handleLoadFile = () =>{
       axios.post('/api2/api/transcribe_files/', {
       //   media_urls: [  
@@ -35,6 +46,10 @@ const LoadFile = () =>{
       })
       .catch(function (error) {
         console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: error.message,
+        });
       });
     }
     return(

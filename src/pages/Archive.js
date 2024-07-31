@@ -23,9 +23,21 @@ const Archive = () => {
     },
   });
 
+  const previousPage = () => {
+    if(data.previous){
+      setPage(page-1)
+    }
+  }
+
+  const nextPage = () => {
+    if(data.next){
+      setPage(page+1)
+    }
+  }
+
   useEffect(() => {
     axios
-      .get(`/api1/api/requests/?page=1`, {
+      .get(`/api1/api/requests/?page=${page}`, {
         headers: {
           Authorization: `Token a85d08400c622b50b18b61e239b9903645297196`,
         },
@@ -43,7 +55,7 @@ const Archive = () => {
         });
         setLoading(false)
       });
-  }, [refreshCounter]);
+  }, [refreshCounter,page]);
 
   return (
     <div className="archive-page">
@@ -216,7 +228,7 @@ const Archive = () => {
               data.results.map((item) => <ArchiveDetail item={item} setRefreshCounter={setRefreshCounter}  />)}
           </div>
           <div className="pagination">
-            <button className="pagination-btn">
+            <button className="pagination-btn" onClick={()=>previousPage()} >
               <svg
                 width="6"
                 height="10"
@@ -230,7 +242,7 @@ const Archive = () => {
                 />
               </svg>
             </button>
-            <p>1</p>
+            {data.previous && <p style={{marginLeft:'0.5rem',marginRight:'0.5rem'}}>{page-1}</p>}
             <p style={{
               background:'#07B49B',
               color:'#FFFFFF',
@@ -239,10 +251,12 @@ const Archive = () => {
               width:'1.5rem',
               height:'1.5rem',
               paddingRight:'0.5rem',
-              paddingTop:'0.1rem'
-            }}>2</p>
-            <p>3</p>
-            <button className="pagination-btn">
+              paddingTop:'0.1rem',
+              marginLeft:'0.5rem',
+              marginRight:'0.5rem',
+            }}>{page}</p>
+            {data.next && <p style={{marginLeft:'0.5rem',marginRight:'0.5rem'}}>{page+1}</p>}
+            <button className="pagination-btn" onClick={()=>nextPage()}>
               <svg
                 width="6"
                 height="10"
