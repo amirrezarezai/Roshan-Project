@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/Roshan-Project/static/css/main.ad27e5b1.css",
-    "main.js": "/Roshan-Project/static/js/main.a399a062.js",
+    "main.js": "/Roshan-Project/static/js/main.1bfdc75b.js",
     "static/media/Qs_Iranyekan.ttf": "/Roshan-Project/static/media/Qs_Iranyekan.3fb368ca1bd556d23f46.ttf",
     "index.html": "/Roshan-Project/index.html",
     "main.ad27e5b1.css.map": "/Roshan-Project/static/css/main.ad27e5b1.css.map",
-    "main.a399a062.js.map": "/Roshan-Project/static/js/main.a399a062.js.map"
+    "main.1bfdc75b.js.map": "/Roshan-Project/static/js/main.1bfdc75b.js.map"
   },
   "entrypoints": [
     "static/css/main.ad27e5b1.css",
-    "static/js/main.a399a062.js"
+    "static/js/main.1bfdc75b.js"
   ]
 }
