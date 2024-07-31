@@ -1,16 +1,14 @@
 import { useRef, useState } from "react";
-import ReactAudioPlayer from "react-audio-player";
 import { useAudio } from "../hook/useAudio";
-import music from "../media/images/a.mp3";
-import Stack from "@mui/material/Stack";
 import Slider from "@mui/material/Slider";
-// import {VolumeDown} from '@mui/icons-material/VolumeDown';
-// import {VolumeUp} from '@mui/icons-material/VolumeUp';
-import { Box } from "@mui/material";
+import Swal from "sweetalert2";
 
-const Show = () => {
+
+const Show = ({data,setOpen}) => {
   const [step, setStep] = useState(0);
   const audioRef = useRef(null);
+  const fullText = data && data[0].segments.map((segment) => segment.text).join(" ");
+  console.log(data);
   const {
     isPaused,
     isMuted,
@@ -28,10 +26,58 @@ const Show = () => {
     back,
     handleVolumeChange,
   } = useAudio(audioRef);
+
+  const handleDownload = () => {  
+    const a = document.createElement('a');  
+    a.href = data[0].media_url;  
+    document.body.appendChild(a);  
+    a.click();  
+    document.body.removeChild(a);  
+  }; 
+
+  const formatTimestamp = (time) => {  
+    const parts = time.split(':');  
+    const part2 = parts[2].split('.')
+    if (parts[0] != '0') {  
+      return `${parts[0]}:${parts[1]}:${part2[0]}`;
+    }  
+    return `${parts[1]}:${part2[0]}`;
+  }; 
+
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
+      2,
+      "0"
+    )}`;
+  };
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    },
+  });
+
+  const handleCopy = () =>{
+    navigator.clipboard.writeText(fullText) 
+    Toast.fire({
+      icon: "success",
+      title: "متن مورد نظر شما کپی شد ",
+    });
+  }
+
   return (
     <div className="show-media">
       <div className="buttons">
         <button
+          className="show-media-step-btn"
           style={{
             width: "90px",
             height: "24px",
@@ -97,6 +143,7 @@ const Show = () => {
           )}
         </button>
         <button
+          className="show-media-step-btn"
           style={{
             width: "136.81px",
             height: "24px",
@@ -162,6 +209,7 @@ const Show = () => {
             viewBox="0 0 14 15"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
+            onClick={handleDownload}
           >
             <path
               d="M6.39307 10C6.32739 10.0001 6.26235 9.98485 6.20166 9.95523C6.14098 9.92561 6.08584 9.88217 6.0394 9.82739C5.99296 9.77261 5.95613 9.70757 5.93102 9.63599C5.90591 9.5644 5.89301 9.48768 5.89307 9.41021V0.58979C5.89307 0.433368 5.94574 0.283352 6.03951 0.172745C6.13328 0.0621384 6.26046 0 6.39307 0C6.52567 0 6.65285 0.0621384 6.74662 0.172745C6.84039 0.283352 6.89307 0.433368 6.89307 0.58979V9.41021C6.89307 9.56663 6.84039 9.71665 6.74662 9.82725C6.65285 9.93786 6.52567 10 6.39307 10Z"
@@ -190,6 +238,7 @@ const Show = () => {
             viewBox="0 0 16 18"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
+            onClick={()=>handleCopy()}
           >
             <path
               d="M6.43517 17.3084H14.2768C14.6861 17.3079 15.0785 17.1308 15.3679 16.816C15.6572 16.5013 15.8199 16.0746 15.8203 15.6295V7.10304C15.8198 6.65812 15.657 6.23158 15.3677 5.91701C15.0783 5.60245 14.686 5.42557 14.2768 5.42517H6.43563C6.0265 5.42557 5.63424 5.60247 5.34495 5.91704C5.05566 6.23162 4.89297 6.65816 4.89261 7.10304V15.6295C4.89285 16.0744 5.0554 16.5011 5.3446 16.8158C5.63379 17.1306 6.026 17.3077 6.43517 17.3084ZM14.2768 6.67173C14.3821 6.67173 14.483 6.71716 14.5575 6.79803C14.6319 6.8789 14.6738 6.9886 14.6739 7.10304V15.6295C14.6739 15.7441 14.6321 15.854 14.5577 15.935C14.4832 16.0161 14.3822 16.0617 14.2768 16.0618H6.43563C6.33035 16.0616 6.22946 16.0159 6.1551 15.9348C6.08074 15.8538 6.03898 15.744 6.03898 15.6295V7.10304C6.03898 6.98865 6.08077 6.87894 6.15516 6.79806C6.22954 6.71717 6.33043 6.67173 6.43563 6.67173H14.2768Z"
@@ -202,6 +251,7 @@ const Show = () => {
           </svg>
         </button>
         <button
+        className="refresh-btn"
           style={{
             width: "112px",
             height: "34px",
@@ -211,6 +261,7 @@ const Show = () => {
             border: "none",
             fontSize: "14px",
           }}
+          onClick={()=>setOpen(0)}
         >
           <svg
             width="12"
@@ -276,13 +327,7 @@ const Show = () => {
               height: "220px",
             }}
           >
-            [با][---][---] [با] و[---][---] [با][---][---][---][---] کجایی تو
-            [خوش] می دیدی من خسته شدم [ما را] [به] این [زودی] چه جوری شد [عشق
-            شدی] به این است[---] [آخرش] سی با فکر [و] چقدر [نزار می خوام] که
-            [چشم تو] [و با رفت][---][---][---][---][---][---][---][---] سخت
-            [آرام] ولی ازت می خوام[---] بر نگردی هر کسی که به [تو] باشه[---]
-            کاشکی تو منو [بردی] [که چشمک][---] با[---][---][---][---][---]
-            [ابو][---] [با] و و و و و [او]
+            {fullText}
           </p>
         </div>
       )}
@@ -292,37 +337,19 @@ const Show = () => {
             className="table"
             style={{ height: "220px", overflowY: "scroll" }}
           >
-            <div className="table-row">
-              <p>00:03</p>
-              <p>00:00</p>
-              <p>[با]</p>
-            </div>
-            <div className="table-row">
-              <p>00:03</p>
-              <p>00:00</p>
-              <p>[با]</p>
-            </div>
-            <div className="table-row">
-              <p>00:03</p>
-              <p>00:00</p>
-              <p>[با]</p>
-            </div>
-            <div className="table-row">
-              <p>00:03</p>
-              <p>00:00</p>
-              <p>[با]</p>
-            </div>
-            <div className="table-row">
-              <p>00:03</p>
-              <p>00:00</p>
-              <p>[با]</p>
-            </div>
+            {data[0].segments.map((segment) => (
+                    <div className="table-row">
+                      <p style={{width:'2rem'}}>{formatTimestamp(segment.end)}</p>
+                      <p style={{width:'2rem'}}>{formatTimestamp(segment.start)}</p>
+                      <p>{segment.text}</p>
+                    </div>
+                  ))}
           </div>
         </div>
       )}
       <div className="audio-player" dir="ltr">
         <div>
-          <audio ref={audioRef} src={music} />
+          <audio ref={audioRef} src={data && data[0].media_url} />
           <div className="player" style={{width:'500px',marginLeft:'2.5rem',background:'#F8F8F8',marginTop:'2rem',borderRadius:'10px'}}>
             <button
               style={{ background: "#ffffff00", border: "none", }}
@@ -359,7 +386,7 @@ const Show = () => {
             </button>
             <Slider
               type="range"
-              style={{ display: "inline-block", width: "325px", }}
+              style={{ display: "inline-block", width: "325px",marginLeft:'0.5rem',marginTop:'0.5rem' }}
               min={0}
               size="small"
               max={audioRef.current?.duration || 0}
@@ -369,7 +396,10 @@ const Show = () => {
                 (audioRef.current.currentTime = Number(e.target.value))
               }
             />
-            <button style={{ background: "#ffffff00", border: "none",marginLeft:'1.5rem', }}>
+            <p style={{ marginLeft: "0.5rem",marginTop:'0.5rem' }}>
+                    {formatTime(currentTime)}
+                  </p>
+            <button style={{ background: "#ffffff00", border: "none",marginLeft:'0.5rem', }}>
               <svg
                 width="18"
                 height="16"
@@ -387,15 +417,15 @@ const Show = () => {
             </button>
             <Slider
               type="range"
-              style={{ display: "inline-block", width: "40px", }}
+              style={{ display: "inline-block", width: "40px",marginLeft:'0.5rem',marginTop:'0.5rem' }}
               className="volume"
               min={0}
               max={100}
+              size="small"
               value={currentVolume}
               onChange={(e) => handleVolumeChange(e)}
             />
           </div>
-          {}
         </div>
       </div>
     </div>

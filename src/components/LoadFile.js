@@ -1,12 +1,61 @@
 import { useState } from "react"
 import Show from "./Show"
+import axios from 'axios';
+import Swal from "sweetalert2";
 
 const LoadFile = () =>{
     const [open, setOpen] = useState(0)
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "top",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      },
+    });
+    const handleLoadFile = () =>{
+      axios.post('/api2/api/transcribe_files/', {
+      //   media_urls: [  
+      //     link  
+      // ] 
+      formdata: [
+        {
+          "key": "language",
+          "value": "FA",
+          "type": "text"
+        },
+        {
+          "key": "media",
+          "type": "file",
+          "src": "/home/mrh/Music/02.wav"
+        }
+      ]
+      }, {
+        headers: {  
+          Authorization: `Token d3a08cd693cdac5e8eb50c10ada68b98bfea1f09`,   
+      } 
+      })
+      .then(function (response) {
+        console.log(response.data);
+        // setData(response.data)
+        // setOpen(1)
+        
+      })
+      .catch(function (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: error.message,
+        });
+      });
+    }
     return(
         <>
         {open === 0  && <div className="content">
-              <button className="load-button" style={{ marginRight: "10rem" }} onClick={()=>setOpen(1)}>
+              <button className="load-button" style={{ marginRight: "10rem" }} onClick={()=>handleLoadFile()}>
                 <svg
                   width="33"
                   height="28"
@@ -59,7 +108,7 @@ const LoadFile = () =>{
                 پیاده شده آن، در اینجا ظاهر می شود
               </p>
             </div>} 
-            {open === 1 && <Show />}
+        {open === 1 && <Show />}
         </>
     )
 }
