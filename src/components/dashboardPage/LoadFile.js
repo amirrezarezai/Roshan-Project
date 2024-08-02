@@ -2,9 +2,13 @@ import { useState } from "react"
 import Show from "./Show"
 import axios from 'axios';
 import Swal from "sweetalert2";
+import { setLoading,setData} from '../../redux/actions/dashboardActions'; 
+import { useDispatch, useSelector } from 'react-redux'; 
 
 const LoadFile = () =>{
+  
     const [open, setOpen] = useState(0)
+
     const Toast = Swal.mixin({
       toast: true,
       position: "top",

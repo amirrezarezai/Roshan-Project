@@ -1,13 +1,15 @@
 import { useRef, useState } from "react";
-import { useAudio } from "../hook/useAudio";
+import { useAudio } from "../../hook/useAudio";
 import Slider from "@mui/material/Slider";
 import Swal from "sweetalert2";
+import { useDispatch, useSelector } from 'react-redux';  
 
 
 const Show = ({data,setOpen}) => {
   const [step, setStep] = useState(0);
   const audioRef = useRef(null);
-  const fullText = data && data[0].segments.map((segment) => segment.text).join(" ");
+  const fullText = data && data[0].segments.map((segment) => segment.text).join(" "); 
+
   console.log(data);
   const {
     isPaused,

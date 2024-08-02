@@ -4,9 +4,11 @@ import LoadFile from "./LoadFile";
 import Link from "./Link";
 
 const Uploading = () => {
+
   const [step, setStep] = useState(0);
   const [open, setOpen] = useState(0);
   const [languages, setLanguages] = useState(0)
+
   return (
     <>
       <div className="content">
