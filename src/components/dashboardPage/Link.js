@@ -3,12 +3,16 @@ import Show from "./Show";
 import axios from "axios";
 import { Spinner } from "react-bootstrap";
 import Swal from "sweetalert2";
+import { setLoading,setData} from '../../redux/actions/dashboardActions'; 
+import { useDispatch, useSelector } from 'react-redux';  
 
 const Link = () => {
+  
   const [open, setOpen] = useState(0);
   const [link, setLink] = useState("");
   const [data, setData] = useState();
   const [loading, setLoading] = useState(false);
+
   const Toast = Swal.mixin({
     toast: true,
     position: "top",

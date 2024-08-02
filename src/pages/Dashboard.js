@@ -1,9 +1,14 @@
 import { useState } from "react";
 import SideMenu from "../components/SideMenu";
-import Uploading from "../components/Uploading";
+import Uploading from "../components/dashboardPage/Uploading";
+import { useDispatch, useSelector } from 'react-redux';  
+import { setOpenDropdown } from '../redux/actions/dashboardActions';  
+
 
 const Dashboard = () => {
+  
   const [open, setOpen] = useState(0);
+
 
   return (
     <div className="dashboard-page">

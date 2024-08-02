@@ -1,60 +1,61 @@
 import { useEffect, useState } from "react";
 import SideMenu from "../components/SideMenu";
-import axios from "axios";
-import ArchiveDetail from "../components/ArchiveDetail";
+import ArchiveDetail from "../components/archivePage/ArchiveDetail";
 import { Spinner } from "react-bootstrap";
-import Swal from "sweetalert2";
+import { useDispatch, useSelector } from 'react-redux';  
+import { setLoading,setArchiveData,setRefreshCounter,setPage,fetchArchiveData} from '../redux/actions/archiveActions';  
 
 const Archive = () => {
+  
   const [open, setOpen] = useState(0);
-  const [data, setData] = useState([]);
-  const [loading,setLoading] = useState(false)
-  const [refreshCounter, setRefreshCounter] = useState(0);
-  const [page,setPage] = useState(1)
-  const Toast = Swal.mixin({
-    toast: true,
-    position: "top",
-    showConfirmButton: false,
-    timer: 3000,
-    timerProgressBar: true,
-    didOpen: (toast) => {
-      toast.onmouseenter = Swal.stopTimer;
-      toast.onmouseleave = Swal.resumeTimer;
-    },
-  });
+
+  const { data,loading,refreshCounter,page } = useSelector((state) => state.archive);  
+  const dispatch = useDispatch();
+
+
+  //   position: "top",
+  //   showConfirmButton: false,
+  //   timer: 3000,
+  //   timerProgressBar: true,
+  //   didOpen: (toast) => {
+  //     toast.onmouseenter = Swal.stopTimer;
+  //     toast.onmouseleave = Swal.resumeTimer;
+  //   },
+  // });
 
   const previousPage = () => {
     if(data.previous){
-      setPage(page-1)
+      dispatch(setPage(page-1))
     }
   }
 
   const nextPage = () => {
     if(data.next){
-      setPage(page+1)
+      dispatch(setPage(page+1))
     }
   }
 
   useEffect(() => {
-    axios
-      .get(`/api1/api/requests/?page=${page}`, {
-        headers: {
-          Authorization: `Token a85d08400c622b50b18b61e239b9903645297196`,
-        },
-      } ,setLoading(true))
-      .then(function (response) {
-        console.log(response.data);
-        setData(response.data);
-        setLoading(false)
-      })
-      .catch(function (error) {
-        console.log(error);
-        Toast.fire({
-          icon: "error",
-          title: error.message,
-        });
-        setLoading(false)
-      });
+    // axios
+    //   .get(`/api1/api/requests/?page=${page}`, {
+    //     headers: {
+    //       Authorization: `Token a85d08400c622b50b18b61e239b9903645297196`,
+    //     },
+    //   } ,setLoading(true))
+    //   .then(function (response) {
+    //     console.log(response.data);
+    //     setArchiveData(response.data);
+    //     setLoading(false)
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //     Toast.fire({
+    //       icon: "error",
+    //       title: error.message,
+    //     });
+    //     setLoading(false)
+    //   });
+    dispatch(fetchArchiveData(page))
   }, [refreshCounter,page]);
 
   return (
@@ -225,7 +226,7 @@ const Archive = () => {
               <div></div>
             </div>
             {data.results &&
-              data.results.map((item) => <ArchiveDetail item={item} setRefreshCounter={setRefreshCounter}  />)}
+              data.results.map((item) => <ArchiveDetail item={item} />)}
           </div>
           <div className="pagination">
             <button className="pagination-btn" onClick={()=>previousPage()} >
@@ -242,7 +243,7 @@ const Archive = () => {
                 />
               </svg>
             </button>
-            {data.previous && <p style={{marginLeft:'0.5rem',marginRight:'0.5rem'}}>{page-1}</p>}
+            {data.previous && <p onClick={()=>previousPage()} style={{marginLeft:'0.5rem',marginRight:'0.5rem'}}>{page-1}</p>}
             <p style={{
               background:'#07B49B',
               color:'#FFFFFF',
@@ -255,8 +256,8 @@ const Archive = () => {
               marginLeft:'0.5rem',
               marginRight:'0.5rem',
             }}>{page}</p>
-            {data.next && <p style={{marginLeft:'0.5rem',marginRight:'0.5rem'}}>{page+1}</p>}
-            <button className="pagination-btn" onClick={()=>nextPage()}>
+            {data.next && <p onClick={()=>nextPage()} style={{marginLeft:'0.5rem',marginRight:'0.5rem'}}>{page+1}</p>}
+            <button className="pagination-btn"  onClick={()=>nextPage()}>
               <svg
                 width="6"
                 height="10"

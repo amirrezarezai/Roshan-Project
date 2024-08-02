@@ -1,12 +1,15 @@
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Slider from "@mui/material/Slider";
-import { useAudio } from "../hook/useAudio";
+import { useAudio } from "../../hook/useAudio";
 import moment from "moment-jalaali";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { setRefreshCounter,} from '../../redux/actions/archiveActions';   
+import { useDispatch, useSelector } from 'react-redux';  
 
-const ArchiveDetail = ({ item,setRefreshCounter }) => {
+const ArchiveDetail = ({item}) => {
+
   const [openArchive, setOpenArchive] = useState(0);
   const [step, setStep] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -31,6 +34,8 @@ const ArchiveDetail = ({ item,setRefreshCounter }) => {
     back,
     handleVolumeChange,
   } = useAudio(audioRef);
+  const dispatch = useDispatch();
+
   const jalaliDate = moment(item.processed.slice(0, 10))
     .locale("fa")
     .format("jYYYY/jM/jD");
@@ -96,7 +101,7 @@ const ArchiveDetail = ({ item,setRefreshCounter }) => {
       })
       .then(function (response) {
         console.log(response.data);
-        setRefreshCounter(prevCounter => prevCounter + 1)
+        dispatch(setRefreshCounter(prevCounter => prevCounter + 1))
         Toast.fire({
           icon: "success",
           title: 'با موفقیت حذف شد',
