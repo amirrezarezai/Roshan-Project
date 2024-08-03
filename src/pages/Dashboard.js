@@ -1,14 +1,9 @@
 import { useState } from "react";
 import SideMenu from "../components/SideMenu";
 import Uploading from "../components/dashboardPage/Uploading";
-import { useDispatch, useSelector } from 'react-redux';  
-import { setOpenDropdown } from '../redux/actions/dashboardActions';  
-
 
 const Dashboard = () => {
-  
   const [open, setOpen] = useState(0);
-
 
   return (
     <div className="dashboard-page">
@@ -37,7 +32,7 @@ const Dashboard = () => {
                 stroke-linejoin="round"
               />
             </svg>
-            <p style={{ marginRight: "0.4rem",}}>مهمان</p>
+            <p style={{ marginRight: "0.4rem" }}>مهمان</p>
             <svg
               width="7"
               height="5"
@@ -170,14 +165,23 @@ const Dashboard = () => {
           >
             تبدیل گفتار به متن
           </p>
-          <p style={{ fontWeight: "400", fontSize: "16px",color:'#969696',width:'434px',height:'56px',textAlign:'center',marginRight:'5rem' }}>
-            آوا با استفاده از هزاران ساعت گفتار با صدای افراد مختلف،
-             زبان فارسی
+          <p
+            style={{
+              fontWeight: "400",
+              fontSize: "16px",
+              color: "#969696",
+              width: "434px",
+              height: "56px",
+              textAlign: "center",
+              marginRight: "5rem",
+            }}
+          >
+            آوا با استفاده از هزاران ساعت گفتار با صدای افراد مختلف، زبان فارسی
             را یاد گرفته است و می‌تواند متن صحبت‌ها را بنویسد.
           </p>
         </div>
         <div className="uploading">
-            <Uploading />
+          <Uploading />
         </div>
       </div>
     </div>

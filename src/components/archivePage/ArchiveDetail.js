@@ -5,11 +5,10 @@ import { useAudio } from "../../hook/useAudio";
 import moment from "moment-jalaali";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { setRefreshCounter,} from '../../redux/actions/archiveActions';   
-import { useDispatch, useSelector } from 'react-redux';  
+import { setRefreshCounter } from "../../redux/actions/archiveActions";
+import { useDispatch, useSelector } from "react-redux";
 
-const ArchiveDetail = ({item}) => {
-
+const ArchiveDetail = ({ item }) => {
   const [openArchive, setOpenArchive] = useState(0);
   const [step, setStep] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -39,7 +38,7 @@ const ArchiveDetail = ({item}) => {
   const jalaliDate = moment(item.processed.slice(0, 10))
     .locale("fa")
     .format("jYYYY/jM/jD");
-    
+
   const parseDuration = (duration) => {
     const parts = duration.split(":");
     const hours = parts.length === 3 ? parts[0] : 0;
@@ -70,29 +69,32 @@ const ArchiveDetail = ({item}) => {
       2,
       "0"
     )}`;
-  }
-
-  const formatTimestamp = (time) => {  
-    const parts = time.split(':');  
-    const part2 = parts[2].split('.')
-    if (parts[0] != '0') {  
-      return `${parts[0]}:${parts[1]}:${part2[0]}`;
-    }  
-    return `${parts[1]}:${part2[0]}`;
   };
 
-  const handleDownload = (e) => {  
-    const a = document.createElement('a');  
-    a.href = item.url;  
-    document.body.appendChild(a);  
-    a.click();  
-    document.body.removeChild(a); 
-    e.stopPropagation() 
-  }; 
+  const formatTimestamp = (time) => {
+    const parts = time.split(":");
+    const part2 = parts[2].split(".");
 
+    const minutes = parts[1].padStart(2, "0");
+    const seconds = part2[0].padStart(2, "0");
 
-  const handleDelete = (e) =>{
-    e.stopPropagation() 
+    if (parts[0] !== "0") {
+      return `${parts[0]}:${minutes}:${seconds}`;
+    }
+    return `${minutes}:${seconds}`;
+  };
+
+  const handleDownload = (e) => {
+    const a = document.createElement("a");
+    a.href = item.url;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    e.stopPropagation();
+  };
+
+  const handleDelete = (e) => {
+    e.stopPropagation();
     axios
       .delete(`/api1/api/requests/${item.id}/`, {
         headers: {
@@ -101,10 +103,10 @@ const ArchiveDetail = ({item}) => {
       })
       .then(function (response) {
         console.log(response.data);
-        dispatch(setRefreshCounter(prevCounter => prevCounter + 1))
+        dispatch(setRefreshCounter((prevCounter) => prevCounter + 1));
         Toast.fire({
           icon: "success",
-          title: 'با موفقیت حذف شد',
+          title: "با موفقیت حذف شد",
         });
       })
       .catch(function (error) {
@@ -113,18 +115,17 @@ const ArchiveDetail = ({item}) => {
           icon: "error",
           title: error.message,
         });
-      })
-  }
+      });
+  };
 
   const handleCopy = (e) => {
     Toast.fire({
       icon: "success",
       title: "متن مورد نظر شما کپی شد",
     });
-    navigator.clipboard.writeText(fullText) 
-    e.stopPropagation()
-  }
-
+    navigator.clipboard.writeText(fullText);
+    e.stopPropagation();
+  };
 
   return (
     <>
@@ -177,7 +178,7 @@ const ArchiveDetail = ({item}) => {
             xmlns="http://www.w3.org/2000/svg"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            onClick={(e)=>handleDownload(e)}
+            onClick={(e) => handleDownload(e)}
           >
             <path
               d="M6.39307 10C6.32739 10.0001 6.26235 9.98485 6.20166 9.95523C6.14098 9.92561 6.08584 9.88217 6.0394 9.82739C5.99296 9.77261 5.95613 9.70757 5.93102 9.63599C5.90591 9.5644 5.89301 9.48768 5.89307 9.41021V0.58979C5.89307 0.433368 5.94574 0.283352 6.03951 0.172745C6.13328 0.0621384 6.26046 0 6.39307 0C6.52567 0 6.65285 0.0621384 6.74662 0.172745C6.84039 0.283352 6.89307 0.433368 6.89307 0.58979V9.41021C6.89307 9.56663 6.84039 9.71665 6.74662 9.82725C6.65285 9.93786 6.52567 10 6.39307 10Z"
@@ -239,7 +240,7 @@ const ArchiveDetail = ({item}) => {
               onMouseEnter={() => setIsHovered4(true)}
               onMouseLeave={() => setIsHovered4(false)}
               style={{ marginBottom: "1rem" }}
-              onClick={(e)=>handleDelete(e)}
+              onClick={(e) => handleDelete(e)}
             >
               <ellipse
                 cx="12.7011"
@@ -295,7 +296,7 @@ const ArchiveDetail = ({item}) => {
               xmlns="http://www.w3.org/2000/svg"
               onMouseEnter={() => setIsHovered4(true)}
               onMouseLeave={() => setIsHovered4(false)}
-              onClick={(e)=>handleDelete(e)}
+              onClick={(e) => handleDelete(e)}
             >
               <path
                 d="M1.49172 2.56934H9.94577C10.2182 2.56934 10.4375 2.78457 10.4375 3.05192V14.5175C10.4375 14.7848 10.2182 15.0001 9.94577 15.0001H1.49172C1.21931 15.0001 1 14.7848 1 14.5175V3.05192C1 2.78457 1.21931 2.56934 1.49172 2.56934V2.56934Z"
@@ -384,7 +385,7 @@ const ArchiveDetail = ({item}) => {
             xmlns="http://www.w3.org/2000/svg"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            onClick={(e)=>handleDownload(e)}
+            onClick={(e) => handleDownload(e)}
           >
             <path
               d="M6.39307 10C6.32739 10.0001 6.26235 9.98485 6.20166 9.95523C6.14098 9.92561 6.08584 9.88217 6.0394 9.82739C5.99296 9.77261 5.95613 9.70757 5.93102 9.63599C5.90591 9.5644 5.89301 9.48768 5.89307 9.41021V0.58979C5.89307 0.433368 5.94574 0.283352 6.03951 0.172745C6.13328 0.0621384 6.26046 0 6.39307 0C6.52567 0 6.65285 0.0621384 6.74662 0.172745C6.84039 0.283352 6.89307 0.433368 6.89307 0.58979V9.41021C6.89307 9.56663 6.84039 9.71665 6.74662 9.82725C6.65285 9.93786 6.52567 10 6.39307 10Z"
@@ -425,7 +426,7 @@ const ArchiveDetail = ({item}) => {
             xmlns="http://www.w3.org/2000/svg"
             onMouseEnter={() => setIsHovered3(true)}
             onMouseLeave={() => setIsHovered3(false)}
-            onClick={(e) =>handleCopy(e)}
+            onClick={(e) => handleCopy(e)}
           >
             <path
               d="M6.62156 17.2009H14.4574C14.8664 17.2004 15.2585 17.0233 15.5476 16.7085C15.8368 16.3938 15.9994 15.967 15.9998 15.522V6.99509C15.9993 6.55014 15.8366 6.12358 15.5475 5.80901C15.2583 5.49443 14.8663 5.31753 14.4574 5.31714H6.62202C6.2132 5.31753 5.82123 5.49445 5.53215 5.80904C5.24307 6.12363 5.08051 6.55019 5.08014 6.99509V15.522C5.08038 15.9669 5.24282 16.3936 5.5318 16.7083C5.82078 17.0231 6.2127 17.2003 6.62156 17.2009ZM14.4574 6.56376C14.5626 6.56376 14.6634 6.60919 14.7378 6.69006C14.8122 6.77094 14.8541 6.88065 14.8542 6.99509V15.522C14.8542 15.6365 14.8124 15.7464 14.738 15.8275C14.6636 15.9086 14.5627 15.9542 14.4574 15.9543H6.62202C6.51682 15.954 6.41601 15.9084 6.3417 15.8273C6.2674 15.7463 6.22567 15.6365 6.22567 15.522V6.99509C6.22567 6.88069 6.26743 6.77098 6.34176 6.69009C6.41609 6.6092 6.5169 6.56376 6.62202 6.56376H14.4574Z"
@@ -446,7 +447,7 @@ const ArchiveDetail = ({item}) => {
               onMouseEnter={() => setIsHovered4(true)}
               onMouseLeave={() => setIsHovered4(false)}
               style={{ marginBottom: "1rem" }}
-              onClick={(e)=>handleDelete(e)}
+              onClick={(e) => handleDelete(e)}
             >
               <ellipse
                 cx="12.7011"
@@ -502,7 +503,7 @@ const ArchiveDetail = ({item}) => {
               xmlns="http://www.w3.org/2000/svg"
               onMouseEnter={() => setIsHovered4(true)}
               onMouseLeave={() => setIsHovered4(false)}
-              onClick={(e)=>handleDelete(e)}
+              onClick={(e) => handleDelete(e)}
             >
               <path
                 d="M1.49172 2.56934H9.94577C10.2182 2.56934 10.4375 2.78457 10.4375 3.05192V14.5175C10.4375 14.7848 10.2182 15.0001 9.94577 15.0001H1.49172C1.21931 15.0001 1 14.7848 1 14.5175V3.05192C1 2.78457 1.21931 2.56934 1.49172 2.56934V2.56934Z"
@@ -553,25 +554,25 @@ const ArchiveDetail = ({item}) => {
                 style={
                   step === 0
                     ? {
-                        width: "90px",
+                        width: "100px",
                         height: "15px",
                         background: "#ffffff00",
                         color: "#000000",
                         border: "none",
                         fontSize: "12px",
                         fontWeight: "400",
-                        paddingBottom: "2rem",
+                        paddingBottom: "2.2rem",
                         borderBottom: "1px solid #000000",
                       }
                     : {
-                        width: "90px",
+                        width: "100px",
                         height: "15px",
                         background: "#ffffff00",
                         color: "#000000",
                         border: "none",
                         fontSize: "12px",
                         fontWeight: "400",
-                        paddingBottom: "2rem",
+                        paddingBottom: "2.2rem",
                         borderBottom: "none",
                       }
                 }
@@ -679,10 +680,24 @@ const ArchiveDetail = ({item}) => {
             {step === 1 && (
               <div className="archive-text">
                 <div className="table">
-                {item.segments.map((segment) => (
-                    <div className="table-row">
-                      <p style={{width:'2rem'}}>{formatTimestamp(segment.end)}</p>
-                      <p style={{width:'2rem'}}>{formatTimestamp(segment.start)}</p>
+                  {item.segments.map((segment) => (
+                    <div
+                      className="table-row"
+                      style={
+                        (formatTime(currentTime) >=
+                          formatTimestamp(segment.start)) &
+                        (formatTime(currentTime) <=
+                          formatTimestamp(segment.end))
+                          ? { color: "#118AD3" }
+                          : {}
+                      }
+                    >
+                      <p style={{ width: "2rem" }}>
+                        {formatTimestamp(segment.end)}
+                      </p>
+                      <p style={{ width: "2rem" }}>
+                        {formatTimestamp(segment.start)}
+                      </p>
                       <p>{segment.text}</p>
                     </div>
                   ))}

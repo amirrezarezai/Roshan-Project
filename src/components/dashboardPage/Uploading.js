@@ -4,10 +4,9 @@ import LoadFile from "./LoadFile";
 import Link from "./Link";
 
 const Uploading = () => {
-
   const [step, setStep] = useState(0);
   const [open, setOpen] = useState(0);
-  const [languages, setLanguages] = useState(0)
+  const [languages, setLanguages] = useState(0);
 
   return (
     <>
@@ -139,8 +138,8 @@ const Uploading = () => {
           زبان گفتار :
         </p>
         {open === 0 && (
-          <button className="dropdown-down-close" onClick={()=>setOpen(1)}>
-            {languages === 0 ? 'فارسی' : "انگلیسی"}
+          <button className="dropdown-down-close" onClick={() => setOpen(1)}>
+            {languages === 0 ? "فارسی" : "انگلیسی"}
             <svg
               width="7"
               height="5"
@@ -157,10 +156,10 @@ const Uploading = () => {
           </button>
         )}
         {open === 1 && (
-          <div className="dropdown-down-open" onClick={()=>setOpen(0)}>
+          <div className="dropdown-down-open" onClick={() => setOpen(0)}>
             <button>
-            {languages === 0 ? 'فارسی' : 'انگلیسی'}
-            <svg
+              {languages === 0 ? "فارسی" : "انگلیسی"}
+              <svg
                 width="7"
                 height="5"
                 viewBox="0 0 7 5"
@@ -194,8 +193,12 @@ const Uploading = () => {
                 stroke-linecap="round"
               />
             </svg>
-            <button  onClick={()=> languages === 0 ? setLanguages(1) : setLanguages(0)}>
-            {languages === 0 ? 'انگلیسی' : 'فارسی'}
+            <button
+              onClick={() =>
+                languages === 0 ? setLanguages(1) : setLanguages(0)
+              }
+            >
+              {languages === 0 ? "انگلیسی" : "فارسی"}
             </button>
           </div>
         )}

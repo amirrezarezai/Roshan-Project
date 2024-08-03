@@ -5,7 +5,7 @@ export const useAudio = (ref) => {
   const [audioState, setAudioState] = useState({
     isPaused: audio ? audio?.paused : true,
     isMuted: audio ? audio?.muted : false,
-    currentVolume: audio?.volume,
+    currentVolume: audio ? audio?.volume : 50,
     currentTime: audio ? audio?.currentTime : 0,
   })
 
@@ -110,13 +110,13 @@ export const useAudio = (ref) => {
     })
   }
   const handleVolumeChange = (e) => {  
-    const newVolume = e.target.value / 100; // To normalize the volume scale to 0-1  
+    const newVolume = e.target.value / 100; 
     if (audio) {  
       audio.volume = newVolume;  
       setAudioState((prev) => ({  
         ...prev,  
-        currentVolume: newVolume * 100, // Convert it back to percentage  
-        isMuted: newVolume === 0, // Update muted state if volume is set to 0  
+        currentVolume: newVolume * 100, 
+        isMuted: newVolume === 0,  
       }))  
     }  
   } 

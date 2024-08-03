@@ -7,15 +7,13 @@
   font-family: "iran Yekan";
 }
 
-
-
 // dashboard Page
 
 .dashboard-page {
   display: grid;
   grid-template-columns: 17% 83%;
   width: 100vw;
-  height: 924px;
+  height: 100vh;
   .content {
     justify-self: center;
     .header {
@@ -29,7 +27,7 @@
   display: grid;
   grid-template-columns: 17% 83%;
   width: 100vw;
-  height: 924px;
+  height: 100vh;
   justify-self: center;
   .content {
     margin-right: 3rem;
@@ -112,19 +110,19 @@
         }
       }
     }
-    .pagination{
+    .pagination {
       width: 100%;
       height: 2.5rem;
       margin-top: 3rem;
       justify-content: center;
-      .pagination-btn{
+      .pagination-btn {
         background-color: #00ba9e00;
         border: none;
         width: 1.5rem;
         height: 1.5rem;
         // margin-left: 1rem;
       }
-      p{
+      p {
         font-size: 14px;
         // margin-left: 1rem;
         cursor: pointer;
@@ -184,7 +182,6 @@
         color: #969696;
         font-size: 16px;
         font-weight: 400;
-        box-shadow: 1px 1px 50px 0px #6363630d;
       }
     }
     .uploading-box {
@@ -192,6 +189,7 @@
       height: 429px;
       border-radius: 25px;
       border: 1px solid #00ba9f;
+      box-shadow: 1px 1px 50px 0px #6363630d;
       .content {
         margin-top: 8rem;
         margin-right: 8rem;
@@ -303,8 +301,8 @@
   }
 }
 
-.show-content{
-  p{
+.show-content {
+  p {
     overflow-y: scroll;
     &::-webkit-scrollbar {
       width: 10px;
@@ -369,64 +367,64 @@ audio::-webkit-media-controls-panel {
 
 // media query
 
-@media(max-width:1079px) {
+@media (max-width: 1079px) {
   // side menu
-  .side-menu{
-      .menu-buttons{
-        width: 125px;
-        margin-right: 2%;
-        .menu-btn{
-          font-size: 0.7rem;
-          padding: none;
-        }
+  .side-menu {
+    .menu-buttons {
+      width: 125px;
+      margin-right: 2%;
+      .menu-btn {
+        font-size: 0.7rem;
+        padding: none;
       }
+    }
   }
 
   //dropdown
-  .dropdown-up-close{
+  .dropdown-up-close {
     margin-right: 75%;
   }
-  .dropdown-up-open{
+  .dropdown-up-open {
     margin-right: 75%;
   }
 
-  .dropdown-group{
+  .dropdown-group {
     margin-right: 24rem !important;
   }
 
-  //uploading 
-  .uploading .content .uploading-box{
+  //uploading
+  .uploading .content .uploading-box {
     width: 590px;
     margin-right: 2%;
   }
-  .uploading-btn{
+  .uploading-btn {
     margin-right: 2%;
   }
 
-  //show 
-  .show-media{
-    .refresh-btn{
+  //show
+  .show-media {
+    .refresh-btn {
       font-size: 0.6rem !important;
     }
-    .show-media-step-btn{
+    .show-media-step-btn {
       font-size: 8px !important;
     }
   }
 
-  //archive 
-  .archive-page{
-    .content{
-      .archive{
+  //archive
+  .archive-page {
+    .content {
+      .archive {
         width: 100%;
-        .header-table{
+        .header-table {
           font-size: 11px !important;
           grid-template-columns: 5% 40% 17% 10% 10% 15%;
         }
-        .content-table{
+        .content-table {
           font-size: 9px !important;
           grid-template-columns: 5% 40% 17% 10% 10% 3% 3% 3% 4%;
         }
-        .content-table-up{
+        .content-table-up {
           font-size: 9px !important;
           grid-template-columns: 5% 40% 17% 10% 10% 3% 3% 3% 4%;
         }
@@ -435,22 +433,21 @@ audio::-webkit-media-controls-panel {
   }
 
   //archive - audio player
-  .archive{
-    .audio-player{
+  .archive {
+    .audio-player {
       right: 100% !important;
-      .player{
+      .player {
         width: 530px !important;
       }
     }
   }
-
 }
 
-@media(max-width:770px){
-  .archive{
-    .audio-player{
+@media (max-width: 770px) {
+  .archive {
+    .audio-player {
       right: 115% !important;
-      .player{
+      .player {
         width: 520px !important;
       }
     }

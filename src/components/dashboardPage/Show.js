@@ -2,15 +2,13 @@ import { useRef, useState } from "react";
 import { useAudio } from "../../hook/useAudio";
 import Slider from "@mui/material/Slider";
 import Swal from "sweetalert2";
-import { useDispatch, useSelector } from 'react-redux';  
 
-
-const Show = ({data,setOpen}) => {
+const Show = ({ data, setOpen }) => {
   const [step, setStep] = useState(0);
   const audioRef = useRef(null);
-  const fullText = data && data[0].segments.map((segment) => segment.text).join(" "); 
+  const fullText =
+    data && data[0].segments.map((segment) => segment.text).join(" ");
 
-  console.log(data);
   const {
     isPaused,
     isMuted,
@@ -29,22 +27,26 @@ const Show = ({data,setOpen}) => {
     handleVolumeChange,
   } = useAudio(audioRef);
 
-  const handleDownload = () => {  
-    const a = document.createElement('a');  
-    a.href = data[0].media_url;  
-    document.body.appendChild(a);  
-    a.click();  
-    document.body.removeChild(a);  
-  }; 
+  const handleDownload = () => {
+    const a = document.createElement("a");
+    a.href = data[0].media_url;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
 
-  const formatTimestamp = (time) => {  
-    const parts = time.split(':');  
-    const part2 = parts[2].split('.')
-    if (parts[0] != '0') {  
-      return `${parts[0]}:${parts[1]}:${part2[0]}`;
-    }  
-    return `${parts[1]}:${part2[0]}`;
-  }; 
+  const formatTimestamp = (time) => {
+    const parts = time.split(":");
+    const part2 = parts[2].split(".");
+
+    const minutes = parts[1].padStart(2, "0");
+    const seconds = part2[0].padStart(2, "0");
+
+    if (parts[0] !== "0") {
+      return `${parts[0]}:${minutes}:${seconds}`;
+    }
+    return `${minutes}:${seconds}`;
+  };
 
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
@@ -67,13 +69,13 @@ const Show = ({data,setOpen}) => {
     },
   });
 
-  const handleCopy = () =>{
-    navigator.clipboard.writeText(fullText) 
+  const handleCopy = () => {
+    navigator.clipboard.writeText(fullText);
     Toast.fire({
       icon: "success",
       title: "متن مورد نظر شما کپی شد ",
     });
-  }
+  };
 
   return (
     <div className="show-media">
@@ -132,7 +134,7 @@ const Show = ({data,setOpen}) => {
               viewBox="0 0 103 1"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              style={{ marginTop: "1.8rem" }}
+              style={{ marginTop: "1.7rem" }}
             >
               <line
                 x1="-4.37114e-08"
@@ -185,7 +187,7 @@ const Show = ({data,setOpen}) => {
               viewBox="0 0 103 1"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              style={{ marginTop: "1.8rem" }}
+              style={{ marginTop: "1.7rem" }}
             >
               <line
                 x1="-4.37114e-08"
@@ -240,7 +242,7 @@ const Show = ({data,setOpen}) => {
             viewBox="0 0 16 18"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            onClick={()=>handleCopy()}
+            onClick={() => handleCopy()}
           >
             <path
               d="M6.43517 17.3084H14.2768C14.6861 17.3079 15.0785 17.1308 15.3679 16.816C15.6572 16.5013 15.8199 16.0746 15.8203 15.6295V7.10304C15.8198 6.65812 15.657 6.23158 15.3677 5.91701C15.0783 5.60245 14.686 5.42557 14.2768 5.42517H6.43563C6.0265 5.42557 5.63424 5.60247 5.34495 5.91704C5.05566 6.23162 4.89297 6.65816 4.89261 7.10304V15.6295C4.89285 16.0744 5.0554 16.5011 5.3446 16.8158C5.63379 17.1306 6.026 17.3077 6.43517 17.3084ZM14.2768 6.67173C14.3821 6.67173 14.483 6.71716 14.5575 6.79803C14.6319 6.8789 14.6738 6.9886 14.6739 7.10304V15.6295C14.6739 15.7441 14.6321 15.854 14.5577 15.935C14.4832 16.0161 14.3822 16.0617 14.2768 16.0618H6.43563C6.33035 16.0616 6.22946 16.0159 6.1551 15.9348C6.08074 15.8538 6.03898 15.744 6.03898 15.6295V7.10304C6.03898 6.98865 6.08077 6.87894 6.15516 6.79806C6.22954 6.71717 6.33043 6.67173 6.43563 6.67173H14.2768Z"
@@ -253,7 +255,7 @@ const Show = ({data,setOpen}) => {
           </svg>
         </button>
         <button
-        className="refresh-btn"
+          className="refresh-btn"
           style={{
             width: "112px",
             height: "34px",
@@ -263,7 +265,7 @@ const Show = ({data,setOpen}) => {
             border: "none",
             fontSize: "14px",
           }}
-          onClick={()=>setOpen(0)}
+          onClick={() => setOpen(0)}
         >
           <svg
             width="12"
@@ -340,21 +342,40 @@ const Show = ({data,setOpen}) => {
             style={{ height: "220px", overflowY: "scroll" }}
           >
             {data[0].segments.map((segment) => (
-                    <div className="table-row">
-                      <p style={{width:'2rem'}}>{formatTimestamp(segment.end)}</p>
-                      <p style={{width:'2rem'}}>{formatTimestamp(segment.start)}</p>
-                      <p>{segment.text}</p>
-                    </div>
-                  ))}
+              <div
+                className="table-row"
+                style={
+                  (formatTime(currentTime) >= formatTimestamp(segment.start)) &
+                  (formatTime(currentTime) <= formatTimestamp(segment.end))
+                    ? { color: "#118AD3" }
+                    : {}
+                }
+              >
+                <p style={{ width: "2rem" }}>{formatTimestamp(segment.end)}</p>
+                <p style={{ width: "2rem" }}>
+                  {formatTimestamp(segment.start)}
+                </p>
+                <p>{segment.text}</p>
+              </div>
+            ))}
           </div>
         </div>
       )}
       <div className="audio-player" dir="ltr">
         <div>
           <audio ref={audioRef} src={data && data[0].media_url} />
-          <div className="player" style={{width:'500px',marginLeft:'2.5rem',background:'#F8F8F8',marginTop:'2rem',borderRadius:'10px'}}>
+          <div
+            className="player"
+            style={{
+              width: "500px",
+              marginLeft: "2.5rem",
+              background: "#F8F8F8",
+              marginTop: "2rem",
+              borderRadius: "10px",
+            }}
+          >
             <button
-              style={{ background: "#ffffff00", border: "none", }}
+              style={{ background: "#ffffff00", border: "none" }}
               onClick={togglePause}
             >
               {!isPaused ? (
@@ -388,7 +409,12 @@ const Show = ({data,setOpen}) => {
             </button>
             <Slider
               type="range"
-              style={{ display: "inline-block", width: "325px",marginLeft:'0.5rem',marginTop:'0.5rem' }}
+              style={{
+                display: "inline-block",
+                width: "325px",
+                marginLeft: "0.5rem",
+                marginTop: "0.5rem",
+              }}
               min={0}
               size="small"
               max={audioRef.current?.duration || 0}
@@ -398,10 +424,16 @@ const Show = ({data,setOpen}) => {
                 (audioRef.current.currentTime = Number(e.target.value))
               }
             />
-            <p style={{ marginLeft: "0.5rem",marginTop:'0.5rem' }}>
-                    {formatTime(currentTime)}
-                  </p>
-            <button style={{ background: "#ffffff00", border: "none",marginLeft:'0.5rem', }}>
+            <p style={{ marginLeft: "0.5rem", marginTop: "0.5rem" }}>
+              {formatTime(currentTime)}
+            </p>
+            <button
+              style={{
+                background: "#ffffff00",
+                border: "none",
+                marginLeft: "0.5rem",
+              }}
+            >
               <svg
                 width="18"
                 height="16"
@@ -419,7 +451,12 @@ const Show = ({data,setOpen}) => {
             </button>
             <Slider
               type="range"
-              style={{ display: "inline-block", width: "40px",marginLeft:'0.5rem',marginTop:'0.5rem' }}
+              style={{
+                display: "inline-block",
+                width: "40px",
+                marginLeft: "0.5rem",
+                marginTop: "0.5rem",
+              }}
               className="volume"
               min={0}
               max={100}

@@ -2,16 +2,16 @@ import { useEffect, useState } from "react";
 import SideMenu from "../components/SideMenu";
 import ArchiveDetail from "../components/archivePage/ArchiveDetail";
 import { Spinner } from "react-bootstrap";
-import { useDispatch, useSelector } from 'react-redux';  
-import { setLoading,setArchiveData,setRefreshCounter,setPage,fetchArchiveData} from '../redux/actions/archiveActions';  
+import { useDispatch, useSelector } from "react-redux";
+import { setPage, fetchArchiveData } from "../redux/actions/archiveActions";
 
 const Archive = () => {
-  
   const [open, setOpen] = useState(0);
 
-  const { data,loading,refreshCounter,page } = useSelector((state) => state.archive);  
+  const { data, loading, refreshCounter, page } = useSelector(
+    (state) => state.archive
+  );
   const dispatch = useDispatch();
-
 
   //   position: "top",
   //   showConfirmButton: false,
@@ -24,16 +24,16 @@ const Archive = () => {
   // });
 
   const previousPage = () => {
-    if(data.previous){
-      dispatch(setPage(page-1))
+    if (data.previous) {
+      dispatch(setPage(page - 1));
     }
-  }
+  };
 
   const nextPage = () => {
-    if(data.next){
-      dispatch(setPage(page+1))
+    if (data.next) {
+      dispatch(setPage(page + 1));
     }
-  }
+  };
 
   useEffect(() => {
     // axios
@@ -55,8 +55,8 @@ const Archive = () => {
     //     });
     //     setLoading(false)
     //   });
-    dispatch(fetchArchiveData(page))
-  }, [refreshCounter,page]);
+    dispatch(fetchArchiveData(page));
+  }, [refreshCounter, page]);
 
   return (
     <div className="archive-page">
@@ -215,67 +215,93 @@ const Archive = () => {
           </div>
         )}
         <div className="header">آرشیو من</div>
-        {!loading && <div className="archive">
-          <div className="table">
-            <div className="header-table">
-              <div></div>
-              <p>نام فایل</p>
-              <p>تاریخ بارگذاری</p>
-              <p>نوع فایل</p>
-              <p>مدت زمان</p>
-              <div></div>
+        {!loading && (
+          <div className="archive">
+            <div className="table">
+              <div className="header-table">
+                <div></div>
+                <p>نام فایل</p>
+                <p>تاریخ بارگذاری</p>
+                <p>نوع فایل</p>
+                <p>مدت زمان</p>
+                <div></div>
+              </div>
+              {data.results &&
+                data.results.map((item) => <ArchiveDetail item={item} />)}
             </div>
-            {data.results &&
-              data.results.map((item) => <ArchiveDetail item={item} />)}
-          </div>
-          <div className="pagination">
-            <button className="pagination-btn" onClick={()=>previousPage()} >
-              <svg
-                width="6"
-                height="10"
-                viewBox="0 0 6 10"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+            <div className="pagination">
+              <button className="pagination-btn" onClick={() => previousPage()}>
+                <svg
+                  width="6"
+                  height="10"
+                  viewBox="0 0 6 10"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M0.418713 9.29766C0.335878 9.29764 0.254908 9.27716 0.186044 9.23879C0.117181 9.20043 0.0635161 9.14591 0.0318369 9.08212C0.000157703 9.01834 -0.00811283 8.94817 0.00807135 8.88047C0.0242555 8.81277 0.0641673 8.75059 0.122759 8.70179L4.98896 4.64663L0.122759 0.591457C0.0464711 0.525635 0.00425808 0.437476 0.00521228 0.345969C0.00616649 0.254462 0.0502116 0.166928 0.127861 0.10222C0.20551 0.0375125 0.310551 0.000808365 0.42036 1.31932e-05C0.530168 -0.000781979 0.635959 0.0343954 0.714946 0.0979689L5.87738 4.4C5.95589 4.46544 6 4.5542 6 4.64674C6 4.73928 5.95589 4.82804 5.87738 4.89349L0.714946 9.19551C0.676037 9.22792 0.62985 9.25362 0.579022 9.27114C0.528193 9.28867 0.47372 9.29768 0.418713 9.29766Z"
+                    fill="black"
+                  />
+                </svg>
+              </button>
+              {data.previous && (
+                <p
+                  onClick={() => previousPage()}
+                  style={{ marginLeft: "0.5rem", marginRight: "0.5rem" }}
+                >
+                  {page - 1}
+                </p>
+              )}
+              <p
+                style={{
+                  background: "#07B49B",
+                  color: "#FFFFFF",
+                  fontWeight: "400",
+                  borderRadius: "50%",
+                  width: "1.5rem",
+                  height: "1.5rem",
+                  paddingRight: "0.5rem",
+                  paddingTop: "0.1rem",
+                  marginLeft: "0.5rem",
+                  marginRight: "0.5rem",
+                }}
               >
-                <path
-                  d="M0.418713 9.29766C0.335878 9.29764 0.254908 9.27716 0.186044 9.23879C0.117181 9.20043 0.0635161 9.14591 0.0318369 9.08212C0.000157703 9.01834 -0.00811283 8.94817 0.00807135 8.88047C0.0242555 8.81277 0.0641673 8.75059 0.122759 8.70179L4.98896 4.64663L0.122759 0.591457C0.0464711 0.525635 0.00425808 0.437476 0.00521228 0.345969C0.00616649 0.254462 0.0502116 0.166928 0.127861 0.10222C0.20551 0.0375125 0.310551 0.000808365 0.42036 1.31932e-05C0.530168 -0.000781979 0.635959 0.0343954 0.714946 0.0979689L5.87738 4.4C5.95589 4.46544 6 4.5542 6 4.64674C6 4.73928 5.95589 4.82804 5.87738 4.89349L0.714946 9.19551C0.676037 9.22792 0.62985 9.25362 0.579022 9.27114C0.528193 9.28867 0.47372 9.29768 0.418713 9.29766Z"
-                  fill="black"
-                />
-              </svg>
-            </button>
-            {data.previous && <p onClick={()=>previousPage()} style={{marginLeft:'0.5rem',marginRight:'0.5rem'}}>{page-1}</p>}
-            <p style={{
-              background:'#07B49B',
-              color:'#FFFFFF',
-              fontWeight:'400',
-              borderRadius:'50%',
-              width:'1.5rem',
-              height:'1.5rem',
-              paddingRight:'0.5rem',
-              paddingTop:'0.1rem',
-              marginLeft:'0.5rem',
-              marginRight:'0.5rem',
-            }}>{page}</p>
-            {data.next && <p onClick={()=>nextPage()} style={{marginLeft:'0.5rem',marginRight:'0.5rem'}}>{page+1}</p>}
-            <button className="pagination-btn"  onClick={()=>nextPage()}>
-              <svg
-                width="6"
-                height="10"
-                viewBox="0 0 6 10"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M5.58129 9.29766C5.66412 9.29764 5.74509 9.27716 5.81396 9.23879C5.88282 9.20043 5.93648 9.14591 5.96816 9.08212C5.99984 9.01834 6.00811 8.94817 5.99193 8.88047C5.97574 8.81277 5.93583 8.75059 5.87724 8.70179L1.01104 4.64663L5.87724 0.591457C5.95353 0.525635 5.99574 0.437476 5.99479 0.345969C5.99383 0.254462 5.94979 0.166928 5.87214 0.10222C5.79449 0.0375125 5.68945 0.000808365 5.57964 1.31932e-05C5.46983 -0.000781979 5.36404 0.0343954 5.28505 0.0979689L0.12262 4.4C0.044107 4.46544 0 4.5542 0 4.64674C0 4.73928 0.044107 4.82804 0.12262 4.89349L5.28505 9.19551C5.32396 9.22792 5.37015 9.25362 5.42098 9.27114C5.47181 9.28867 5.52628 9.29768 5.58129 9.29766Z"
-                  fill="black"
-                />
-              </svg>
-            </button>
+                {page}
+              </p>
+              {data.next && (
+                <p
+                  onClick={() => nextPage()}
+                  style={{ marginLeft: "0.5rem", marginRight: "0.5rem" }}
+                >
+                  {page + 1}
+                </p>
+              )}
+              <button className="pagination-btn" onClick={() => nextPage()}>
+                <svg
+                  width="6"
+                  height="10"
+                  viewBox="0 0 6 10"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M5.58129 9.29766C5.66412 9.29764 5.74509 9.27716 5.81396 9.23879C5.88282 9.20043 5.93648 9.14591 5.96816 9.08212C5.99984 9.01834 6.00811 8.94817 5.99193 8.88047C5.97574 8.81277 5.93583 8.75059 5.87724 8.70179L1.01104 4.64663L5.87724 0.591457C5.95353 0.525635 5.99574 0.437476 5.99479 0.345969C5.99383 0.254462 5.94979 0.166928 5.87214 0.10222C5.79449 0.0375125 5.68945 0.000808365 5.57964 1.31932e-05C5.46983 -0.000781979 5.36404 0.0343954 5.28505 0.0979689L0.12262 4.4C0.044107 4.46544 0 4.5542 0 4.64674C0 4.73928 0.044107 4.82804 0.12262 4.89349L5.28505 9.19551C5.32396 9.22792 5.37015 9.25362 5.42098 9.27114C5.47181 9.28867 5.52628 9.29768 5.58129 9.29766Z"
+                    fill="black"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
-        </div>}
-        {loading && <Spinner style={{color:'#00ba9f',marginTop:'5rem',marginRight:'45%'}} animation="border" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>}
+        )}
+        {loading && (
+          <Spinner
+            style={{ color: "#00ba9f", marginTop: "5rem", marginRight: "45%" }}
+            animation="border"
+            role="status"
+          >
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        )}
       </div>
     </div>
   );
